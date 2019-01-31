@@ -33,6 +33,7 @@ class Connection
     protected $client_id;
     protected $client_secret;
     protected $redirect_uri;
+    protected $access_token;
 
     /** 
      * Set values and start a guzzle
@@ -112,13 +113,12 @@ class Connection
     /**
      * Get a Bearer header
      * 
-     * @param string $token
      * @return string
      */
-    public function getBearer($token)
+    public function getBearerHeader()
     {
         return [
-            'Authorization' => "Bearer " . $token
+            'Authorization' => "Bearer " . $this->access_token
         ];
     }
 
@@ -215,5 +215,38 @@ class Connection
 
         $token = json_decode($result->getBody(), true);
         return new Token($token);
+    }
+
+    /**
+     * A get proxy which adds our token
+     * 
+     * @param string $path 
+     * @param array $param
+     * @return Result
+     */
+    public function get($path = "/", $params = [])
+    {
+        $result = $this->connection
+        ->request(
+            "GET",
+            $this->getUrl("/data/v1/accounts"),
+            [
+                'headers' => $this->getBearerHeader()
+            ]
+        );
+
+        return $result;
+    }
+
+    /** 
+     * Set out access_token
+     * 
+     * @param string $access_token
+     * @return $this
+     */
+    public function setAccessToken($token)
+    { 
+        $this->access_token = $token;
+        return $this;
     }
 }

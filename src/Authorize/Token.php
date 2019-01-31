@@ -37,4 +37,24 @@ class Token
     {
         return $this->access_token;
     }
+
+    /**
+     * Is our token expired
+     * 
+     * @return bool
+     */
+    public function isExpired()
+    {
+        return false;
+    }
+
+    /**
+     * Refresh our token
+     * 
+     * @return true
+     */
+    public function refresh()
+    {
+        return true;
+    }
 }
