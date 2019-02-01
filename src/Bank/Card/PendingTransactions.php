@@ -5,12 +5,12 @@ namespace TrueLayer\Bank\Card;
 use TrueLayer\Authorize\Token;
 use TrueLayer\Connection;
 use TrueLayer\Request;
-use TrueLayer\Data\Card;
+use TrueLayer\Data\CardTransaction;
 
-class Information extends Request
+class PendingTransactions extends Request
 {
     /**
-     * Get card information
+     * Get pending transactions
      * 
      * @param string $account_id
      * @return mixed
@@ -19,13 +19,17 @@ class Information extends Request
     {
         $result = $this->connection
             ->setAccessToken($this->token->getAccessToken())
-            ->get("/data/v1/cards/" . $account_id);
+            ->get("/data/v1/cards/" . $account_id . "/transactions/pending");
 
         if((int)$result->getStatusCode() > 400) { 
             throw new OauthTokenInvalid;
         }
 
         $data = json_decode($result->getBody(), true);
-        return new Card($data['results']);
+        $results = array_walk($data['results'], function($value) {
+            return new CardTransaction($value);
+        });
+
+        return $results;
     }
 }

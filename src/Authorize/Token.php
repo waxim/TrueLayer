@@ -2,6 +2,9 @@
 
 namespace TrueLayer\Authorize;
 
+use DateTime;
+use DateTinterval;
+
 class Token
 {
     /**
@@ -13,6 +16,7 @@ class Token
     protected $expires_in;
     protected $token_type;
     protected $refresh_token;
+    protected $issued_at;
 
     /**
      * Build our token
@@ -25,7 +29,14 @@ class Token
         $this->access_token = $token['access_token'];
         $this->expires_in = $token['expires_in'];
         $this->token_type = $token['token_type'];
-        $this->refresh_token = $token['refresh_token'];
+
+        $this->refresh_token = isset($token['refresh_token']) ? 
+            $token['refresh_token'] : 
+            null;
+
+        $this->issued_at = isset($token['issued_at']) ?  
+            (new DateTime($token['issued_at']))->format(DateTime::ATOM) : 
+            (new DateTime)->format(DateTime::ATOM);
     }
 
     /**
@@ -39,22 +50,36 @@ class Token
     }
 
     /**
+     * Get refresh token
+     * 
+     * @return string
+     */
+    public function getRefreshToken()
+    {
+        return $this->refresh_token;
+    }
+
+    /**
      * Is our token expired
      * 
      * @return bool
      */
     public function isExpired()
     {
-        return false;
+        $interval = new DateInterval("PT" + $this->expires_in);
+        $expires = (clone $this->issued_at)
+            ->add($interval);
+        
+        return $expires < (new DateTime);
     }
 
     /**
-     * Refresh our token
+     * Are we refreshable?
      * 
-     * @return true
+     * @return bool
      */
-    public function refresh()
+    public function isRefreshable()
     {
-        return true;
+        return (bool) $this->refresh_token;
     }
 }

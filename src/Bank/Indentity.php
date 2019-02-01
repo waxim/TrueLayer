@@ -1,31 +1,30 @@
 <?php
 
-namespace TrueLayer\Bank\Card;
+namespace TrueLayer\Bank;
 
 use TrueLayer\Authorize\Token;
 use TrueLayer\Connection;
 use TrueLayer\Request;
-use TrueLayer\Data\Card;
+use TrueLayer\Data\Customer;
 
-class Information extends Request
+class Identity extends Request
 {
     /**
-     * Get card information
+     * Get all providers
      * 
-     * @param string $account_id
      * @return mixed
      */
-    public function get($account_id)
+    public function getIdentity()
     {
         $result = $this->connection
             ->setAccessToken($this->token->getAccessToken())
-            ->get("/data/v1/cards/" . $account_id);
+            ->get("/data/v1/info");
 
         if((int)$result->getStatusCode() > 400) { 
             throw new OauthTokenInvalid;
         }
 
         $data = json_decode($result->getBody(), true);
-        return new Card($data['results']);
+        return new Customer($data['results']);
     }
 }

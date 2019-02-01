@@ -5,6 +5,7 @@ namespace TrueLayer\Bank;
 use TrueLayer\Authorize\Token;
 use TrueLayer\Connection;
 use TrueLayer\Request;
+use TrueLayer\Data\Account;
 
 class Accounts extends Request
 {
@@ -24,6 +25,10 @@ class Accounts extends Request
         }
 
         $accounts = json_decode($result->getBody(), true);
-        return $accounts;
+        $results = array_walk($data['results'], function($value) {
+            return new Account($value);
+        });
+
+        return $results;
     }
 }

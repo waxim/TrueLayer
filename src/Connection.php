@@ -5,6 +5,7 @@ namespace TrueLayer;
 use DateTime;
 use GuzzleHttp\Client;
 use TrueLayer\Authorize\Token;
+use TrueLayer\Exceptions\InvalidCodeExchange;
 
 class Connection
 {
@@ -34,6 +35,8 @@ class Connection
     protected $client_secret;
     protected $redirect_uri;
     protected $access_token;
+    protected $scope; 
+    protected $state;
 
     /** 
      * Set values and start a guzzle
@@ -42,12 +45,19 @@ class Connection
      * @param $client_secret string
      * @return void
      */
-    public function __construct($client_id, $client_secret, $request_uri)
-    {
+    public function __construct(
+        $client_id, 
+        $client_secret, 
+        $request_uri,
+        $scope = [],
+        $state = null
+    ) {
         $this->connection = new Client;
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
         $this->request_uri = $request_uri;
+        $this->scope = $scope;
+        $this->state = $state;
     }
 
     /**
@@ -153,14 +163,14 @@ class Connection
      */
     public function getScope()
     {
-        return implode("%20", [
+        return implode("%20", (count($this->scope) > 0 ? $this->scope : [
             "info",
             "accounts",
             "balance",
             "cards",
             "transactions",
             "offline_access"
-        ]);
+        ]));
     }
 
 
@@ -194,7 +204,6 @@ class Connection
      */
     public function getOauthToken($code)
     {
-        
         $result = $this->connection->request(
             'POST',
             $this->getTokenUrl(),
@@ -205,6 +214,35 @@ class Connection
                     'client_secret' => $this->getClientSecret(),
                     'redirect_uri' => $this->getRequestUri(),
                     'code' => $code
+                ]
+            ]
+        );
+        
+        if((int)$result->getStatusCode() > 400) { 
+            throw new InvalidCodeExchange;
+        }
+
+        $token = json_decode($result->getBody(), true);
+        return new Token($token);
+    }
+
+    /**
+     * Refresh an auth token
+     * 
+     * @param Token
+     * @return Token
+     */
+    public function refreshOauthToken(Token $token)
+    {
+        $result = $this->connection->request(
+            'POST',
+            $this->getTokenUrl(),
+            [
+                'form_params' => [
+                    'grant_type' => 'refresh_token',
+                    'client_id'  => $this->getClientId(),
+                    'client_secret' => $this->getClientSecret(),
+                    'refresh_token' => $token->getRefreshToken()
                 ]
             ]
         );
@@ -231,7 +269,11 @@ class Connection
             "GET",
             $this->getUrl("/data/v1/accounts"),
             [
-                'headers' => $this->getBearerHeader()
+                'headers' => ((bool) $this->access_token ? 
+                    $this->getBearerHeader() : 
+                    []
+                ),
+                'query'  => $params
             ]
         );
 
