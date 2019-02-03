@@ -1,5 +1,5 @@
 {
-    "name": "chip/true-layer",
+    "name": "alancole/true-layer",
     "description": "A simple SDK for working with TrueLayer APIs",
     "type": "library",
     "require": {
