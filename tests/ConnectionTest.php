@@ -1,4 +1,5 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
 
 class ConnectionTest extends TestCase
@@ -6,7 +7,7 @@ class ConnectionTest extends TestCase
     public function testWeCanSetClientIdAndSecret()
     {
         $connection = (new \TrueLayer\Connection(
-            "test_id", 
+            "test_id",
             "test_secret",
             "https://localhost.test"
         ));
@@ -19,12 +20,12 @@ class ConnectionTest extends TestCase
     public function testWeGetAnAuthorizationLink()
     {
         $connection = (new \TrueLayer\Connection(
-            "test_id", 
+            "test_id",
             "test_secret",
             "https://localhost.test"
         ));
 
-        $url = filter_var($connection->getAuthorizartionLink(), FILTER_VALIDATE_URL);
-        $this->assertTrue((bool) $url);
+        $url = filter_var($connection->getAuthorizationLink(), FILTER_VALIDATE_URL);
+        $this->assertTrue((bool)$url);
     }
 }

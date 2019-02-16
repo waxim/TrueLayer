@@ -2,18 +2,19 @@
 
 namespace TrueLayer\Bank\Card;
 
-use TrueLayer\Authorize\Token;
-use TrueLayer\Connection;
-use TrueLayer\Request;
 use TrueLayer\Data\Card;
+use TrueLayer\Exceptions\OauthTokenInvalid;
+use TrueLayer\Request;
 
 class Information extends Request
 {
     /**
      * Get card information
-     * 
+     *
      * @param string $account_id
      * @return mixed
+     * @throws OauthTokenInvalid
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get($account_id)
     {
@@ -21,8 +22,8 @@ class Information extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/cards/" . $account_id);
 
-        if((int)$result->getStatusCode() > 400) { 
-            throw new OauthTokenInvalid;
+        if ((int)$result->getStatusCode() > 400) {
+            throw new OauthTokenInvalid();
         }
 
         $data = json_decode($result->getBody(), true);
