@@ -11,7 +11,7 @@ class Connection
 {
     /**
      * TrueLayer settings
-     * 
+     *
      * @const mixed
      */
     const AUTH_PATH = "https://auth.truelayer.com";
@@ -21,33 +21,36 @@ class Connection
 
     /**
      * Hold our API connection
-     * 
-     * @var Guzzle
+     *
+     * @var Client
      */
     protected $connection;
 
     /**
      * Hold our token and secret
-     * 
+     *
      * @var string
      */
     protected $client_id;
     protected $client_secret;
     protected $redirect_uri;
+    protected $request_uri;
     protected $access_token;
-    protected $scope; 
+    protected $scope;
     protected $state;
 
-    /** 
+    /**
      * Set values and start a guzzle
-     * 
+     *
      * @param $client_id string
      * @param $client_secret string
-     * @return void
+     * @param $request_uri
+     * @param array $scope
+     * @param null $state
      */
     public function __construct(
-        $client_id, 
-        $client_secret, 
+        $client_id,
+        $client_secret,
         $request_uri,
         $scope = [],
         $state = null
@@ -62,7 +65,7 @@ class Connection
 
     /**
      * Get client id
-     * 
+     *
      * @return string
      */
     public function getClientId()
@@ -72,7 +75,7 @@ class Connection
 
     /**
      * Get client id
-     * 
+     *
      * @return string
      */
     public function getClientSecret()
@@ -82,7 +85,7 @@ class Connection
 
     /**
      * Get request uri
-     * 
+     *
      * @return string
      */
     public function getRequestUri()
@@ -92,7 +95,7 @@ class Connection
 
     /**
      * Get token url
-     * 
+     *
      * @return string
      */
     public function getTokenUrl()
@@ -102,7 +105,7 @@ class Connection
 
     /**
      * Get connection
-     * 
+     *
      * @return string
      */
     public function getConnection()
@@ -112,7 +115,8 @@ class Connection
 
     /**
      * Get a data path
-     * 
+     *
+     * @param string $path
      * @return string
      */
     public function getUrl($path = "/")
@@ -122,8 +126,8 @@ class Connection
 
     /**
      * Get a Bearer header
-     * 
-     * @return string
+     *
+     * @return array
      */
     public function getBearerHeader()
     {
@@ -134,8 +138,9 @@ class Connection
 
     /**
      * Generate a nonce
-     * 
+     *
      * @return string
+     * @throws \Exception
      */
     public function getNonce()
     {
@@ -147,7 +152,7 @@ class Connection
 
     /**
      * Get our state
-     * 
+     *
      * @return string
      */
     public function getState()
@@ -158,7 +163,7 @@ class Connection
 
     /**
      * Get our scope
-     * 
+     *
      * @return string
      */
     public function getScope()
@@ -175,11 +180,12 @@ class Connection
 
 
     /**
-     * Build an Authorizartion Link
-     * 
+     * Build an Authorization Link
+     *
      * @return string
+     * @throws \Exception
      */
-    public function getAuthorizartionLink()
+    public function getAuthorizationLink()
     {
 
         return self::AUTH_PATH . "/" .
@@ -188,19 +194,22 @@ class Connection
             "&nonce=" . $this->getNonce() .
             "&scope=" . $this->getScope() .
             "&redirect_uri=" . $this->getRequestUri() .
-            "&state=" . urlencode($this->getState()) .  
+            "&state=" . urlencode($this->getState()) .
             "&enable_mock=true" .
             "&enable_oauth_providers=true" .
-            "&enable_open_banking_providers=false" . 
+            "&enable_open_banking_providers=false" .
             "&enable_credentials_sharing_providers=true" .
             "&response_mode=form_post";
     }
 
     /**
      * Get oauth token from code
-     * 
-     * @param code
+     *
+     * @param $code
      * @return Token
+     * @throws InvalidCodeExchange
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
      */
     public function getOauthToken($code)
     {
@@ -210,15 +219,15 @@ class Connection
             [
                 'form_params' => [
                     'grant_type' => 'authorization_code',
-                    'client_id'  => $this->getClientId(),
+                    'client_id' => $this->getClientId(),
                     'client_secret' => $this->getClientSecret(),
                     'redirect_uri' => $this->getRequestUri(),
                     'code' => $code
                 ]
             ]
         );
-        
-        if((int)$result->getStatusCode() > 400) { 
+
+        if ((int)$result->getStatusCode() > 400) {
             throw new InvalidCodeExchange;
         }
 
@@ -228,9 +237,12 @@ class Connection
 
     /**
      * Refresh an auth token
-     * 
-     * @param Token
+     *
+     * @param Token $token
      * @return Token
+     * @throws InvalidCodeExchange
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
      */
     public function refreshOauthToken(Token $token)
     {
@@ -240,14 +252,14 @@ class Connection
             [
                 'form_params' => [
                     'grant_type' => 'refresh_token',
-                    'client_id'  => $this->getClientId(),
+                    'client_id' => $this->getClientId(),
                     'client_secret' => $this->getClientSecret(),
                     'refresh_token' => $token->getRefreshToken()
                 ]
             ]
         );
-        
-        if((int)$result->getStatusCode() > 400) { 
+
+        if ((int)$result->getStatusCode() > 400) {
             throw new InvalidCodeExchange;
         }
 
@@ -257,37 +269,38 @@ class Connection
 
     /**
      * A get proxy which adds our token
-     * 
-     * @param string $path 
-     * @param array $param
-     * @return Result
+     *
+     * @param string $path
+     * @param array $params
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get($path = "/", $params = [])
     {
         $result = $this->connection
-        ->request(
-            "GET",
-            $this->getUrl("/data/v1/accounts"),
-            [
-                'headers' => ((bool) $this->access_token ? 
-                    $this->getBearerHeader() : 
-                    []
-                ),
-                'query'  => $params
-            ]
-        );
+            ->request(
+                "GET",
+                $this->getUrl("/data/v1/accounts"),
+                [
+                    'headers' => ((bool)$this->access_token ?
+                        $this->getBearerHeader() :
+                        []
+                    ),
+                    'query' => $params
+                ]
+            );
 
         return $result;
     }
 
-    /** 
+    /**
      * Set out access_token
-     * 
-     * @param string $access_token
+     *
+     * @param $token
      * @return $this
      */
     public function setAccessToken($token)
-    { 
+    {
         $this->access_token = $token;
         return $this;
     }

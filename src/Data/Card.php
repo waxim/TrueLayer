@@ -1,18 +1,16 @@
 <?php
 
-namespace TrueLayer\Data; 
+namespace TrueLayer\Data;
 
-use TrueLayer\Data as Model;
-use TrueLayer\Data\Bank;
-use TrueLayer\Bank\Account\Types;
 use DateTime;
+use TrueLayer\Data as Model;
 
 class Card extends Model
 {
     /**
      * Some constants
-     * 
-     * @var string 
+     *
+     * @var string
      */
     const NETWORK_VISA = "VISA";
     const NETWORK_MASTERCARD = "MASTERCARD";
@@ -22,70 +20,70 @@ class Card extends Model
 
     /**
      * Account id
-     * 
+     *
      * @var string
      */
     public $id;
 
     /**
      * Card network
-     * 
+     *
      * @var string
      */
     public $network;
 
     /**
      * Card type
-     * 
+     *
      * @var string
      */
     public $type;
 
     /**
      * Card currency
-     * 
+     *
      * @var string
      */
     public $currency;
 
     /**
      * Card name
-     * 
+     *
      * @var string
      */
     public $name;
 
     /**
      * Card digits
-     * 
+     *
      * @var string
      */
     public $last_four_digits;
 
     /**
      * Name on card
-     * 
+     *
      * @var string
      */
     public $name_on_card;
 
     /**
      * Valid from
-     * 
+     *
      * @var DateTime
      */
     public $valid_from;
 
     /**
      * Valid to
-     * 
+     *
      * @var DateTime
      */
     public $valid_to;
 
     /**
      * Updated at
-     * 
+     *
      * @var DateTime
      */
     public $update_at;
@@ -93,40 +91,42 @@ class Card extends Model
     /**
      * Provide a map from array
      * to DTO
-     * 
+     *
      * @var array
+     * @return array
      */
-    public function map(){
+    public function map()
+    {
         return [
-            'id'           => ['key' => 'account_id'],
-            'network'      => ['key' => 'card_network'],
-            'type'         => ['key' => 'card_type'],
-            'currency'     => ['key' => 'currency'],
-            'name'         => ['key' => 'display_name'],
+            'id' => ['key' => 'account_id'],
+            'network' => ['key' => 'card_network'],
+            'type' => ['key' => 'card_type'],
+            'currency' => ['key' => 'currency'],
+            'name' => ['key' => 'display_name'],
             'last_four_digits' => ['key' => 'partial_card_number'],
             'name_on_card' => ['key' => 'name_on_card'],
-            'valid_from'   => ['key' => 'valid_from',
-                'callback' => function($value) {
+            'valid_from' => ['key' => 'valid_from',
+                'callback' => function ($value) {
                     return new DateTime($value);
                 }
             ],
-            'valid_to'   => ['key' => 'valid_to',
-                'callback' => function($value) {
+            'valid_to' => ['key' => 'valid_to',
+                'callback' => function ($value) {
                     return new DateTime($value);
                 }
             ],
-            'updated_at'   => ['key' => 'update_timestamp', 
-                'callback' => function($value) {
+            'updated_at' => ['key' => 'update_timestamp',
+                'callback' => function ($value) {
                     return new DateTime($value);
                 }
             ],
-            'provider'     => [
+            'provider' => [
                 'collect' => [
                     'display_name' => 'provider.display_name',
-                    'logo_uri'     => 'provider.logo_uri',
-                    'provider_id'  =>'provider.provider_id'
+                    'logo_uri' => 'provider.logo_uri',
+                    'provider_id' => 'provider.provider_id'
                 ],
-                'callback' => function($values) {
+                'callback' => function ($values) {
                     return new Bank($values);
                 }
             ]
@@ -135,8 +135,9 @@ class Card extends Model
 
     /**
      * Is expired?
-     * 
+     *
      * @return bool
+     * @throws \Exception
      */
     public function isExpired()
     {
@@ -145,7 +146,7 @@ class Card extends Model
 
     /**
      * Is MasterCard?
-     * 
+     *
      * @return bool
      */
     public function isMastercard()
@@ -155,7 +156,7 @@ class Card extends Model
 
     /**
      * Is Amex?
-     * 
+     *
      * @return bool
      */
     public function isAmex()
@@ -165,7 +166,7 @@ class Card extends Model
 
     /**
      * Is Visa?
-     * 
+     *
      * @return bool
      */
     public function isVisa()
@@ -175,7 +176,7 @@ class Card extends Model
 
     /**
      * Is Credit Card?
-     * 
+     *
      * @return bool
      */
     public function isCreditCard()
@@ -185,7 +186,7 @@ class Card extends Model
 
     /**
      * Is Debit Card
-     * 
+     *
      * @return bool
      */
     public function isDebitCard()

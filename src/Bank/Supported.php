@@ -2,20 +2,19 @@
 
 namespace TrueLayer\Bank;
 
-use TrueLayer\Authorize\Token;
-use TrueLayer\Connection;
 use TrueLayer\Request;
 
 class Supported extends Request
 {
     /**
      * Get all providers
-     * 
+     *
      * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getProviders()
     {
-       $result = $this->connection
+        $result = $this->connection
             ->get("/api/providers");
 
         $providers = json_decode($result->getBody(), true);

@@ -6,7 +6,7 @@ class Data
 {
     /**
      * Hold all our errors
-     * 
+     *
      * @var array
      */
     protected $errors = [
@@ -74,14 +74,14 @@ class Data
 
     /**
      * Get our error by key
-     * 
-     * @param string $key 
+     *
+     * @param $string
      * @return array
      */
     public function getError($string)
     {
-        return array_key_exists($string, $this->errors) ? 
-            $this->errors[$string] : 
+        return array_key_exists($string, $this->errors) ?
+            $this->errors[$string] :
             $this->errors['unknown'];
     }
 }

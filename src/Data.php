@@ -6,7 +6,7 @@ class Data
 {
     /**
      * Hold our data as dotted.
-     * 
+     *
      * @return array
      */
     protected $data = [];
@@ -14,6 +14,9 @@ class Data
 
     /**
      * A magic getter
+     * @param $name
+     * @param $arguments
+     * @return mixed|null
      */
     public function __call($name, $arguments)
     {
@@ -24,7 +27,7 @@ class Data
 
     /**
      * An empty map
-     * 
+     *
      * @return array
      */
     public function map()
@@ -34,18 +37,18 @@ class Data
 
     /**
      * Build out a mode from an array
-     * 
+     *
      * @param array data
      * @return void
      */
     public function __construct(array $data = [])
     {
         $this->setData($data);
-        if(count($this->map()) > 0) { 
-            foreach($this->map() as $key => $to){
+        if (count($this->map()) > 0) {
+            foreach ($this->map() as $key => $to) {
                 if (isset($to['collect'])) {
                     $collection = [];
-                    foreach($to['collect'] as $ref => $lookup) {
+                    foreach ($to['collect'] as $ref => $lookup) {
                         $collection[$ref] = $this->getDataValue($lookup);
                     }
                     $this->{$key} = $collection;
@@ -55,7 +58,7 @@ class Data
                     continue;
                 }
 
-                if(isset($to['callback']) &&  is_callable($to['callback'])) {
+                if (isset($to['callback']) && is_callable($to['callback'])) {
                     $this->{$key} = $to['callback']($this->{$key});
                 }
             }
@@ -64,7 +67,7 @@ class Data
 
     /**
      * Set out data array
-     * 
+     *
      * @param array $data
      * @return $this
      */
@@ -76,8 +79,9 @@ class Data
 
     /**
      * Return a value to set
-     * 
-     * @param string $key 
+     *
+     * @param string $key
+     * @return mixed|string
      */
     public function getDataValue($key)
     {
@@ -86,7 +90,7 @@ class Data
 
     /**
      * Function to covert from camel
-     * 
+     *
      * @param string $string
      * @return string $string
      */
@@ -97,14 +101,14 @@ class Data
 
     /**
      * Convert to array
-     * 
+     *
      * @return array
      */
     public function toArray()
     {
         $vars = get_object_vars($this);
         $array = [];
-        foreach($vars as $var) {
+        foreach ($vars as $var) {
             $array[$var] = $this->{$var};
         }
 
@@ -113,7 +117,7 @@ class Data
 
     /**
      * Convert to json string
-     * 
+     *
      * @return string
      */
     public function toJson()
@@ -124,8 +128,8 @@ class Data
     /**
      * Flatten a multi-dimensional associative array with dots.
      *
-     * @param  array   $array
-     * @param  string  $prepend
+     * @param  array $array
+     * @param  string $prepend
      * @return array
      */
     public function dot($array, $prepend = '')
@@ -133,15 +137,15 @@ class Data
         $results = [];
         foreach ($array as $key => $value) {
 
-            if(is_array($this->should_dot) && in_array($key, $this->should_dot)){
+            if (is_array($this->should_dot) && in_array($key, $this->should_dot)) {
                 $results[$key] = $value;
                 continue;
             }
 
-            if (is_array($value) && ! empty($value)) {
-                $results = array_merge($results, $this->dot($value, $prepend.$key.'.'));
+            if (is_array($value) && !empty($value)) {
+                $results = array_merge($results, $this->dot($value, $prepend . $key . '.'));
             } else {
-                $results[$prepend.$key] = $value;
+                $results[$prepend . $key] = $value;
             }
         }
         return $results;

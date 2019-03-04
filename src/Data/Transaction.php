@@ -1,14 +1,15 @@
 <?php
 
-namespace TrueLayer\Data; 
+namespace TrueLayer\Data;
 
+use TrueLayer\Categories;
 use TrueLayer\Data as Model;
 
 class Transaction extends Model
 {
     /**
      * Some constants
-     * 
+     *
      * @var string
      */
     const TYPE_CREDIT = 'CREDIT';
@@ -16,77 +17,77 @@ class Transaction extends Model
 
     /**
      * Transaction id
-     * 
+     *
      * @var string
      */
     public $id;
 
     /**
      * Transaction description
-     * 
+     *
      * @var string
      */
     public $description;
 
     /**
      * Transaction type
-     * 
+     *
      * @var string
      */
     public $type;
 
     /**
      * Transaction category
-     * 
+     *
      * @var string
      */
     public $category;
 
     /**
      * Transaction classification
-     * 
+     *
      * @var array
      */
-    public $classification =  [];
+    public $classification = [];
 
     /**
-     * Merchant name 
-     * 
+     * Merchant name
+     *
      * @var string
      */
     public $merchant_name;
 
     /**
      * Transaction amount
-     * 
+     *
      * @var double
      */
     public $amount;
 
     /**
      * Transaction currency
-     * 
+     *
      * @var string
      */
     public $currency;
 
     /**
      * Transaction meta
-     * 
+     *
      * @var array
      */
     public $meta;
 
     /**
-     * Transaction tomestamp
-     * 
-     * @var DateTime
+     * Transaction timestamp
+     *
+     * @var \DateTime
      */
     public $timestamp;
 
     /**
      * Skip dotting meta
-     * 
+     *
      * @var mixed
      */
     public $should_dot = ['meta'];
@@ -94,23 +95,25 @@ class Transaction extends Model
     /**
      * Provide a map from array
      * to DTO
-     * 
+     *
      * @var array
+     * @return array
      */
-    public function map(){
+    public function map()
+    {
         return [
-            'id'          => ['key' => 'transaction_id'],
+            'id' => ['key' => 'transaction_id'],
             'description' => ['key' => 'description'],
-            'type'        => ['key' => 'transaction_type'],
-            'category'    => ['key' => 'transaction_category'],
+            'type' => ['key' => 'transaction_type'],
+            'category' => ['key' => 'transaction_category'],
             'classification' => ['key' => 'transaction_classification'],
-            'merchant_name'  => ['key' => 'merchant_name'],
-            'amount'      => ['key' => 'amount'],
-            'currency'    => ['key' => 'currency'],
-            'meta'        => ['key' => 'meta'],
-            'timestamp'   => ['key' => 'timestamp', 
-                'callback' => function($value) {
-                    return new DateTime($value);
+            'merchant_name' => ['key' => 'merchant_name'],
+            'amount' => ['key' => 'amount'],
+            'currency' => ['key' => 'currency'],
+            'meta' => ['key' => 'meta'],
+            'timestamp' => ['key' => 'timestamp',
+                'callback' => function ($value) {
+                    return new \DateTime($value);
                 }
             ]
         ];
@@ -118,47 +121,47 @@ class Transaction extends Model
 
     /**
      * Is bill payment
-     * 
+     *
      * @return bool
      */
     public function isBillPayment()
     {
-        return $this->category == Category::BILL_PAYMENT;
+        return $this->category == Categories::BILL_PAYMENT;
     }
 
     /**
      * Is direct debit
-     * 
+     *
      * @return bool
      */
     public function isDirectDebit()
     {
-        return $this->category == Category::DIRECT_DEBIT;
+        return $this->category == Categories::DIRECT_DEBIT;
     }
 
     /**
      * Is standing order
-     * 
+     *
      * @return bool
      */
     public function isStandingOrder()
     {
-        return $this->category == Category::STANDING_ORDER;
+        return $this->category == Categories::STANDING_ORDER;
     }
 
     /**
      * Is fee
-     * 
+     *
      * @return bool
      */
     public function isBankingFee()
     {
-        return $this->category == Category::FEE_CHARGE;
+        return $this->category == Categories::FEE_CHARGE;
     }
 
     /**
      * is debit
-     * 
+     *
      * @return bool
      */
     public function isDebit()
@@ -168,7 +171,7 @@ class Transaction extends Model
 
     /**
      * is credit
-     * 
+     *
      * @return bool
      */
     public function isCredit()

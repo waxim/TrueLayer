@@ -6,7 +6,7 @@ class Categories
 {
     /**
      * The types of categories we have
-     * 
+     *
      * @var string
      */
     const ATM = "ATM";
