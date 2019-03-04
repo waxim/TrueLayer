@@ -4,6 +4,8 @@ namespace TrueLayer\Authorize;
 
 use DateInterval;
 use DateTime;
+use DateInterval;
+use DateTinterval;
 
 class Token
 {
@@ -18,6 +20,7 @@ class Token
     protected $refresh_token;
     /* @var DateTime */
     protected $issued_at;
+    protected $issued_at_unformatted;
 
     /**
      * Build our token
@@ -35,9 +38,11 @@ class Token
             $token['refresh_token'] :
             null;
 
-        $this->issued_at = isset($token['issued_at']) ?
-            (new DateTime($token['issued_at']))->format(DateTime::ATOM) :
-            (new DateTime)->format(DateTime::ATOM);
+        $this->issued_at_unformatted = isset($token['issued_at']) ?
+            (new DateTime($token['issued_at'])) :
+            (new DateTime);
+
+        $this->issued_at = $this->issued_at_unformatted->format(DateTime::ATOM);
     }
 
     /**
@@ -68,8 +73,8 @@ class Token
      */
     public function isExpired()
     {
-        $interval = new DateInterval("PT" . $this->expires_in);
-        $expires = (clone $this->issued_at)
+        $interval = new DateInterval("PT" . $this->expires_in . "S");
+        $expires = (clone $this->issued_at_unformatted)
             ->add($interval);
 
         return $expires < (new DateTime);
