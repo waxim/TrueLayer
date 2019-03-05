@@ -27,6 +27,7 @@ class Information extends Request
         }
 
         $data = json_decode($result->getBody(), true);
+
         return new Account($data["results"]);
     }
 }

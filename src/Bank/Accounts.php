@@ -11,7 +11,7 @@ class Accounts extends Request
     /**
      * Get all accounts
      *
-     * @return mixed
+     * @return Account|array
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws OauthTokenInvalid
      */
