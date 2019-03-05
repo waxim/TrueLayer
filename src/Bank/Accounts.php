@@ -29,7 +29,7 @@ class Accounts extends Request
 
         $results = $accounts['results'];
 
-        array_walk($accounts['results'], function ($value) {
+        array_walk($results, function ($value) {
             return new Account($value);
         });
 

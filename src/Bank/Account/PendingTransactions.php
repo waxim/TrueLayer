@@ -27,7 +27,10 @@ class PendingTransactions extends Request
         }
 
         $data = json_decode($result->getBody(), true);
-        $results = array_walk($data['results'], function ($value) {
+
+        $results = $data['results'];
+
+        array_walk($results, function ($value) {
             return new Transaction($value);
         });
 
