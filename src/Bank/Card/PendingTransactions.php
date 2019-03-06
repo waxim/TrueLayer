@@ -12,7 +12,7 @@ class PendingTransactions extends Request
      * Get pending transactions
      *
      * @param string $account_id
-     * @return CardTransaction|array
+     * @return mixed
      * @throws OauthTokenInvalid
      * @throws \GuzzleHttp\Exception\GuzzleException
      */

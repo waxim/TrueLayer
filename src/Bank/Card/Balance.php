@@ -12,7 +12,7 @@ class Balance extends Request
      * Get card balance
      *
      * @param string $account_id
-     * @return CardBalance
+     * @return mixed
      * @throws OauthTokenInvalid
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -27,7 +27,6 @@ class Balance extends Request
         }
 
         $data = json_decode($result->getBody(), true);
-
         return new CardBalance($data['results']);
     }
 }

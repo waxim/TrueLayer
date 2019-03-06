@@ -45,6 +45,7 @@ class Balance extends Model
      * Provide a map from array
      * to DTO
      *
+     * @var array
      * @return array
      */
     public function map()

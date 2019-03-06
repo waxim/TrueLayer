@@ -12,7 +12,7 @@ class Balance extends Request
      * Get account balance
      *
      * @param string $account_id
-     * @return Data
+     * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws OauthTokenInvalid
      */
@@ -27,7 +27,6 @@ class Balance extends Request
         }
 
         $data = json_decode($result->getBody(), true);
-
         return new Data($data["results"]);
     }
 }

@@ -9,7 +9,7 @@ class Supported extends Request
     /**
      * Get all providers
      *
-     * @return array
+     * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getProviders()
@@ -18,7 +18,6 @@ class Supported extends Request
             ->get("/api/providers");
 
         $providers = json_decode($result->getBody(), true);
-
         return $providers;
     }
 }
