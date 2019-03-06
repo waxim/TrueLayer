@@ -280,7 +280,7 @@ class Connection
         $result = $this->connection
             ->request(
                 "GET",
-                $this->getUrl("/data/v1/accounts"),
+                $this->getUrl($path),
                 [
                     'headers' => ((bool)$this->access_token ?
                         $this->getBearerHeader() :
