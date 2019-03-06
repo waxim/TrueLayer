@@ -2,11 +2,6 @@
 
 namespace TrueLayer\Authorize;
 
-use DateInterval;
-use DateTime;
-use DateInterval;
-use DateTinterval;
-
 class Token
 {
     /**
