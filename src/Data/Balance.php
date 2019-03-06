@@ -2,7 +2,6 @@
 
 namespace TrueLayer\Data;
 
-use DateTime;
 use TrueLayer\Data as Model;
 
 class Balance extends Model
@@ -38,7 +37,7 @@ class Balance extends Model
     /**
      * Updated at
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $updated_at;
 
@@ -57,7 +56,7 @@ class Balance extends Model
             'overdraft' => ['key' => 'overdraft'],
             'updated_at' => ['key' => 'update_timestamp',
                 'callback' => function ($value) {
-                    return new DateTime($value);
+                    return new \DateTime($value);
                 }
             ],
         ];

@@ -2,7 +2,6 @@
 
 namespace TrueLayer\Data;
 
-use DateTime;
 use TrueLayer\Bank\Account\Types;
 use TrueLayer\Data as Model;
 
@@ -67,7 +66,7 @@ class Account extends Model
     /**
      * Updated at
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $update_at;
 
@@ -91,7 +90,7 @@ class Account extends Model
             'name' => ['key' => 'display_name'],
             'updated_at' => ['key' => 'update_timestamp',
                 'callback' => function ($value) {
-                    return new DateTime($value);
+                    return new \DateTime($value);
                 }
             ],
             'provider' => [

@@ -2,7 +2,6 @@
 
 namespace TrueLayer\Data;
 
-use DateTime;
 use TrueLayer\Data as Model;
 
 class CardBalance extends Model
@@ -45,7 +44,7 @@ class CardBalance extends Model
     /**
      * Last statement date
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $last_statement_date;
 
@@ -59,14 +58,14 @@ class CardBalance extends Model
     /**
      * Payment due date
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $payment_due_date;
 
     /**
      * Updated at
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $updated_at;
 
@@ -88,17 +87,17 @@ class CardBalance extends Model
             'payment_due' => ['key' => 'payment_due'],
             'payment_due_date' => ['key' => 'payment_due_date',
                 'callback' => function ($value) {
-                    return new DateTime($value);
+                    return new \DateTime($value);
                 }
             ],
             'last_statement_date' => ['key' => 'last_statement_date',
                 'callback' => function ($value) {
-                    return new DateTime($value);
+                    return new \DateTime($value);
                 }
             ],
             'updated_at' => ['key' => 'update_timestamp',
                 'callback' => function ($value) {
-                    return new DateTime($value);
+                    return new \DateTime($value);
                 }
             ],
         ];

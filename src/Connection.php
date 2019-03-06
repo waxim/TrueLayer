@@ -2,7 +2,6 @@
 
 namespace TrueLayer;
 
-use DateTime;
 use GuzzleHttp\Client;
 use TrueLayer\Authorize\Token;
 use TrueLayer\Exceptions\InvalidCodeExchange;
@@ -146,7 +145,7 @@ class Connection
     {
         return hash(
             'sha256',
-            (new DateTime())->format(DateTime::ATOM)
+            (new \DateTime())->format(\DateTime::ATOM)
         );
     }
 

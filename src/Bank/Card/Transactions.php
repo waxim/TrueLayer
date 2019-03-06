@@ -2,7 +2,6 @@
 
 namespace TrueLayer\Bank\Card;
 
-use DateTime;
 use TrueLayer\Data\CardTransaction;
 use TrueLayer\Exceptions\OauthTokenInvalid;
 use TrueLayer\Request;
@@ -20,11 +19,11 @@ class Transactions extends Request
      * @throws OauthTokenInvalid
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function get($account_id, DateTime $from = null, DateTime $to = null)
+    public function get($account_id, \DateTime $from = null, \DateTime $to = null)
     {
         $params = array_filter([
-            'from' => ($from ? $from->format(DateTime::ISO8601) : null),
-            'to' => ($to ? $to->format(DateTime::ISO8601) : null),
+            'from' => ($from ? $from->format(\DateTime::ISO8601) : null),
+            'to' => ($to ? $to->format(\DateTime::ISO8601) : null),
         ]);
 
         $result = $this->connection

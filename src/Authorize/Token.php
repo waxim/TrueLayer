@@ -18,7 +18,7 @@ class Token
     protected $expires_in;
     protected $token_type;
     protected $refresh_token;
-    /* @var DateTime */
+    /* @var \DateTime */
     protected $issued_at;
     protected $issued_at_unformatted;
 
@@ -39,10 +39,10 @@ class Token
             null;
 
         $this->issued_at_unformatted = isset($token['issued_at']) ?
-            (new DateTime($token['issued_at'])) :
-            (new DateTime);
+            (new \DateTime($token['issued_at'])) :
+            (new \DateTime);
 
-        $this->issued_at = $this->issued_at_unformatted->format(DateTime::ATOM);
+        $this->issued_at = $this->issued_at_unformatted->format(\DateTime::ATOM);
     }
 
     /**
@@ -73,11 +73,11 @@ class Token
      */
     public function isExpired()
     {
-        $interval = new DateInterval("PT" . $this->expires_in . "S");
+        $interval = new \DateInterval("PT" . $this->expires_in . "S");
         $expires = (clone $this->issued_at_unformatted)
             ->add($interval);
 
-        return $expires < (new DateTime);
+        return $expires < (new \DateTime);
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace TrueLayer\Data;
 
-use DateTime;
 use TrueLayer\Data as Model;
 
 class Card extends Model
@@ -107,17 +106,17 @@ class Card extends Model
             'name_on_card' => ['key' => 'name_on_card'],
             'valid_from' => ['key' => 'valid_from',
                 'callback' => function ($value) {
-                    return new DateTime($value);
+                    return new \DateTime($value);
                 }
             ],
             'valid_to' => ['key' => 'valid_to',
                 'callback' => function ($value) {
-                    return new DateTime($value);
+                    return new \DateTime($value);
                 }
             ],
             'updated_at' => ['key' => 'update_timestamp',
                 'callback' => function ($value) {
-                    return new DateTime($value);
+                    return new \DateTime($value);
                 }
             ],
             'provider' => [
@@ -141,7 +140,7 @@ class Card extends Model
      */
     public function isExpired()
     {
-        return $this->valid_to > (new DateTime);
+        return $this->valid_to > (new \DateTime);
     }
 
     /**

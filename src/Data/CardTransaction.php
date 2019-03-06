@@ -2,7 +2,6 @@
 
 namespace TrueLayer\Data;
 
-use DateTime;
 use TrueLayer\Data as Model;
 
 class CardTransaction extends Model
@@ -67,7 +66,7 @@ class CardTransaction extends Model
     /**
      * Transaction timestamp
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $timestamp;
 
@@ -97,7 +96,7 @@ class CardTransaction extends Model
             'meta' => ['key' => 'meta'],
             'timestamp' => ['key' => 'timestamp',
                 'callback' => function ($value) {
-                    return new DateTime($value);
+                    return new \DateTime($value);
                 }
             ]
         ];
