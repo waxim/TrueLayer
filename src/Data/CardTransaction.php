@@ -103,7 +103,6 @@ class CardTransaction extends Model
         ];
     }
 
-
     /**
      * is debit
      *

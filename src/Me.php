@@ -24,6 +24,7 @@ class Me extends Request
         }
 
         $data = json_decode($result->getBody(), true);
+
         return $data;
     }
 }
