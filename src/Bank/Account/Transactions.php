@@ -16,7 +16,7 @@ class Transactions extends Request
      * @param DateTime $from
      * @param DateTime $to
      *
-     * @return mixed
+     * @return Transaction|array
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws OauthTokenInvalid
      */

@@ -12,7 +12,7 @@ class Information extends Request
      * Get card information
      *
      * @param string $account_id
-     * @return mixed
+     * @return Card
      * @throws OauthTokenInvalid
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -27,6 +27,7 @@ class Information extends Request
         }
 
         $data = json_decode($result->getBody(), true);
+
         return new Card($data['results']);
     }
 }

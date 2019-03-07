@@ -232,6 +232,7 @@ class Connection
         }
 
         $token = json_decode($result->getBody(), true);
+
         return new Token($token);
     }
 
@@ -264,6 +265,7 @@ class Connection
         }
 
         $token = json_decode($result->getBody(), true);
+
         return new Token($token);
     }
 
@@ -297,11 +299,12 @@ class Connection
      * Set out access_token
      *
      * @param $token
-     * @return $this
+     * @return Connection
      */
     public function setAccessToken($token)
     {
         $this->access_token = $token;
+
         return $this;
     }
 }

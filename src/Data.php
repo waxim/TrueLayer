@@ -22,6 +22,7 @@ class Data
     {
         $name = str_replace("get_", "", $this->convert($name));
         $properties = get_object_vars($this);
+
         return in_array($name, $properties) ? $this->{$name} : null;
     }
 
@@ -69,11 +70,12 @@ class Data
      * Set out data array
      *
      * @param array $data
-     * @return $this
+     * @return Data
      */
     public function setData(array $data)
     {
         $this->data = $this->should_dot ? $this->dot($data) : $data;
+
         return $this;
     }
 
@@ -148,6 +150,7 @@ class Data
                 $results[$prepend . $key] = $value;
             }
         }
+
         return $results;
     }
 }

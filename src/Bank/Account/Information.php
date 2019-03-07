@@ -14,7 +14,7 @@ class Information extends Request
      * @param string $account_id
      * @throws OauthTokenInvalid
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @return mixed
+     * @return Account
      */
     public function get($account_id)
     {
@@ -27,6 +27,7 @@ class Information extends Request
         }
 
         $data = json_decode($result->getBody(), true);
+
         return new Account($data["results"]);
     }
 }

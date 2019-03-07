@@ -11,7 +11,7 @@ class Cards extends Request
     /**
      * Get all accounts
      *
-     * @return mixed
+     * @return Card|array
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws OauthTokenInvalid
      */
