@@ -2,6 +2,7 @@
 
 namespace TrueLayer;
 
+use Teapot\StatusCode\Http;
 use TrueLayer\Exceptions\OauthTokenInvalid;
 
 class Me extends Request
@@ -19,7 +20,7 @@ class Me extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/me");
 
-        if ((int)$result->getStatusCode() > 400) {
+        if ((int) $result->getStatusCode() > Http::BAD_REQUEST) {
             throw new OauthTokenInvalid();
         }
 
