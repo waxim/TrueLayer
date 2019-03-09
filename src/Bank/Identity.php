@@ -2,6 +2,7 @@
 
 namespace TrueLayer\Bank;
 
+use Teapot\StatusCode\Http;
 use TrueLayer\Data\Customer;
 use TrueLayer\Exceptions\OauthTokenInvalid;
 use TrueLayer\Request;
@@ -21,7 +22,7 @@ class Identity extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/info");
 
-        if ((int)$result->getStatusCode() > 400) {
+        if ((int) $result->getStatusCode() > Http::BAD_REQUEST) {
             throw new OauthTokenInvalid();
         }
 

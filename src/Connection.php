@@ -4,6 +4,7 @@ namespace TrueLayer;
 
 use DateTime;
 use GuzzleHttp\Client;
+use Teapot\StatusCode\Http;
 use TrueLayer\Authorize\Token;
 use TrueLayer\Exceptions\InvalidCodeExchange;
 
@@ -227,7 +228,7 @@ class Connection
             ]
         );
 
-        if ((int)$result->getStatusCode() > 400) {
+        if ((int) $result->getStatusCode() > Http::BAD_REQUEST) {
             throw new InvalidCodeExchange;
         }
 
@@ -260,7 +261,7 @@ class Connection
             ]
         );
 
-        if ((int)$result->getStatusCode() > 400) {
+        if ((int) $result->getStatusCode() > Http::BAD_REQUEST) {
             throw new InvalidCodeExchange;
         }
 
