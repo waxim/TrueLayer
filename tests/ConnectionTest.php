@@ -1,31 +1,28 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use TrueLayer\Connection;
 
 class ConnectionTest extends TestCase
 {
+    private $connection;
+
+    public function setUp(): void
+    {
+        $this->connection = $this->createTestConnection();
+    }
+
     public function testWeCanSetClientIdAndSecret()
     {
-        $connection = (new \TrueLayer\Connection(
-            "test_id",
-            "test_secret",
-            "https://localhost.test"
-        ));
-
-        $this->assertSame("test_id", $connection->getClientId());
-        $this->assertSame("test_secret", $connection->getClientSecret());
-        $this->assertSame("https://localhost.test", $connection->getRequestUri());
+        $this->assertSame("test_id", $this->connection->getClientId());
+        $this->assertSame("test_secret", $this->connection->getClientSecret());
+        $this->assertSame("https://localhost.test", $this->connection->getRequestUri());
     }
 
     public function testWeGetAnAuthorizationLink()
     {
-        $connection = (new \TrueLayer\Connection(
-            "test_id",
-            "test_secret",
-            "https://localhost.test"
-        ));
 
-        $url = filter_var($connection->getAuthorizationLink(), FILTER_VALIDATE_URL);
+        $url = filter_var($this->connection->getAuthorizationLink(), FILTER_VALIDATE_URL);
         $this->assertTrue((bool) $url);
         $this->assertStringContainsString('response_type', $url);
         $this->assertStringContainsString('client_id', $url);
@@ -38,5 +35,14 @@ class ConnectionTest extends TestCase
         $this->assertStringContainsString('enable_open_banking_providers', $url);
         $this->assertStringContainsString('enable_credentials_sharing_providers', $url);
         $this->assertStringContainsString('response_mode', $url);
+    }
+
+    public static function createTestConnection(): Connection
+    {
+        return new Connection(
+            "test_id",
+            "test_secret",
+            "https://localhost.test"
+        );
     }
 }
