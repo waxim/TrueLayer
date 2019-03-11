@@ -22,10 +22,7 @@ class Identity extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/info");
 
-        if ((int) $result->getStatusCode() > Http::BAD_REQUEST) {
-            throw new OauthTokenInvalid();
-        }
-
+        $this->OAuthCheck($result);
         $data = json_decode($result->getBody(), true);
         return new Customer($data['results']);
     }

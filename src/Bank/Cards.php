@@ -22,10 +22,7 @@ class Cards extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/cards");
 
-        if ((int) $result->getStatusCode() > Http::BAD_REQUEST) {
-            throw new OauthTokenInvalid();
-        }
-
+        $this->OAuthCheck($result);
         $accounts = json_decode($result->getBody(), true);
         $results = array_walk($accounts['results'], function ($value) {
             return new Card($value);

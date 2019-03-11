@@ -23,9 +23,8 @@ class Information extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/cards/" . $account_id);
 
-        if ((int) $result->getStatusCode() > Http::BAD_REQUEST) {
-            throw new OauthTokenInvalid();
-        }
+        $this->OAuthCheck($result);
+
 
         $data = json_decode($result->getBody(), true);
 

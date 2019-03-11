@@ -22,10 +22,7 @@ class Accounts extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/accounts");
 
-        if ((int) $result->getStatusCode() > Http::BAD_REQUEST) {
-            throw new OauthTokenInvalid();
-        }
-
+        $this->OAuthCheck($result);
         $accounts = json_decode($result->getBody(), true);
         $results = array_walk($accounts['results'], function ($value) {
             return new Account($value);

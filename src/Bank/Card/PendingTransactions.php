@@ -23,11 +23,7 @@ class PendingTransactions extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/cards/" . $account_id . "/transactions/pending");
 
-        if ((int) $result->getStatusCode() > Http::BAD_REQUEST) {
-            throw new OauthTokenInvalid();
-        }
-
-        $data = json_decode($result->getBody(), true);
+        $this->OAuthCheck($result);$data = json_decode($result->getBody(), true);
         $results = array_walk($data['results'], function ($value) {
             return new CardTransaction($value);
         });
