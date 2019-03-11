@@ -2,7 +2,6 @@
 
 namespace TrueLayer;
 
-use Teapot\StatusCode\Http;
 use TrueLayer\Exceptions\OauthTokenInvalid;
 
 class Me extends Request

@@ -2,7 +2,6 @@
 
 namespace TrueLayer\Bank\Account;
 
-use Teapot\StatusCode\Http;
 use TrueLayer\Data\Transaction;
 use TrueLayer\Exceptions\OauthTokenInvalid;
 use TrueLayer\Request;

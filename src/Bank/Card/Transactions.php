@@ -3,7 +3,6 @@
 namespace TrueLayer\Bank\Card;
 
 use DateTime;
-use Teapot\StatusCode\Http;
 use TrueLayer\Data\CardTransaction;
 use TrueLayer\Exceptions\OauthTokenInvalid;
 use TrueLayer\Request;
