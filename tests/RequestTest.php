@@ -9,17 +9,6 @@ use TrueLayer\Request;
 
 class RequestTest extends TestCase
 {
-    private $http;
-
-    public function setUp(): void
-    {
-        $this->http = new GuzzleHttp\Client(['base_uri' => 'https://127.0.0.1']);
-    }
-
-    public function tearDown(): void {
-        $this->http = null;
-    }
-
     public function testOauthCheck()
     {
         $request = new Request(ConnectionTest::createTestConnection(), TokenTest::createTestToken());
