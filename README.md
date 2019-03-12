@@ -21,3 +21,7 @@ $accounts = (new TrueLayer\Bank\Accounts($tl, $token))
 
 var_dump($accounts);
 ```
+
+## Contributors
+
+Kevin Diem - [kgdiem](https://github.com/kgdiem)
