@@ -27,12 +27,10 @@ class Accounts extends Request
 
         $accounts = json_decode($result->getBody(), true);
 
-        $results = $accounts['results'];
-
-        array_walk($results, function ($value) {
+        array_walk($accounts['results'], function ($value) {
             return new Account($value);
         });
 
-        return $results;
+        return $accounts['results'];
     }
 }
