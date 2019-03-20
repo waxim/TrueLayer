@@ -38,7 +38,7 @@ class PendingTransactionsTest extends TestCase
 
         $pendingTransactions = new PendingTransactions($connection, $token);
 
-         $pt = $pendingTransactions->get(1);
+        $pt = $pendingTransactions->get(1);
 
         $this->assertIsNotBool($pt);
         $this->assertIsArray($pt);
