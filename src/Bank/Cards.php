@@ -21,7 +21,7 @@ class Cards extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/cards");
 
-        $this->OAuthCheck($result);
+        $this->statusCheck($result);
         $accounts = json_decode($result->getBody(), true);
         $results = array_walk($accounts['results'], function ($value) {
             return new Card($value);

@@ -21,7 +21,7 @@ class Identity extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/info");
 
-        $this->OAuthCheck($result);
+        $this->statusCheck($result);
         $data = json_decode($result->getBody(), true);
         return new Customer($data['results']);
     }

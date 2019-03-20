@@ -21,7 +21,7 @@ class Accounts extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/accounts");
 
-        $this->OAuthCheck($result);
+        $this->statusCheck($result);
         $accounts = json_decode($result->getBody(), true);
         $results = array_walk($accounts['results'], function ($value) {
             return new Account($value);

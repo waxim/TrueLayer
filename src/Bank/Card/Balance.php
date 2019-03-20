@@ -22,7 +22,7 @@ class Balance extends Request
             ->setAccessToken($this->token->getAccessToken())
             ->get("/data/v1/cards/" . $account_id . "/balance");
 
-        $this->OAuthCheck($result);
+        $this->statusCheck($result);
         $data = json_decode($result->getBody(), true);
 
         return new CardBalance($data['results']);
