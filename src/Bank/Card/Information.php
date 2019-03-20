@@ -24,7 +24,6 @@ class Information extends Request
 
         $this->OAuthCheck($result);
 
-
         $data = json_decode($result->getBody(), true);
 
         return new Card($data['results']);
