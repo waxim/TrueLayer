@@ -36,14 +36,22 @@ class PendingTransactionsTest extends TestCase
             ->method('get')
             ->willReturn($response);
 
-        $pt = new PendingTransactions($connection, $token);
+        $pendingTransactions = new PendingTransactions($connection, $token);
 
-        $this->assertIsNotBool(
-            $pt->get(12)
-        );
+         $pt = $pendingTransactions->get(1);
 
-        $this->assertIsArray(
-            $pt->get(34)
-        );
+        $this->assertIsNotBool($pt);
+        $this->assertIsArray($pt);
+        $this->assertArrayHasKey('transaction_id', $pt[0]);
+        $this->assertArrayHasKey('timestamp', $pt[0]);
+        $this->assertArrayHasKey('description', $pt[0]);
+        $this->assertArrayHasKey('amount', $pt[0]);
+        $this->assertArrayHasKey('currency', $pt[0]);
+        $this->assertArrayHasKey('transaction_type', $pt[0]);
+        $this->assertArrayHasKey('transaction_category', $pt[0]);
+        $this->assertArrayHasKey('transaction_classification', $pt[0]);
+        $this->assertArrayHasKey('merchant_name', $pt[0]);
+        $this->assertArrayHasKey('bank_transaction_id', $pt[0]['meta']);
+        $this->assertArrayHasKey('provider_transaction_category', $pt[0]['meta']);
     }
 }
