@@ -7,6 +7,7 @@ use Teapot\StatusCode\Http;
 use TrueLayer\Authorize\Token;
 use TrueLayer\Bank\Account\PendingTransactions;
 use TrueLayer\Connection;
+use TrueLayer\Data\Transaction;
 
 class PendingTransactionsTest extends TestCase
 {
@@ -42,16 +43,24 @@ class PendingTransactionsTest extends TestCase
 
         $this->assertIsNotBool($pt);
         $this->assertIsArray($pt);
-        $this->assertArrayHasKey('transaction_id', $pt[0]);
-        $this->assertArrayHasKey('timestamp', $pt[0]);
-        $this->assertArrayHasKey('description', $pt[0]);
-        $this->assertArrayHasKey('amount', $pt[0]);
-        $this->assertArrayHasKey('currency', $pt[0]);
-        $this->assertArrayHasKey('transaction_type', $pt[0]);
-        $this->assertArrayHasKey('transaction_category', $pt[0]);
-        $this->assertArrayHasKey('transaction_classification', $pt[0]);
-        $this->assertArrayHasKey('merchant_name', $pt[0]);
-        $this->assertArrayHasKey('bank_transaction_id', $pt[0]['meta']);
-        $this->assertArrayHasKey('provider_transaction_category', $pt[0]['meta']);
+        $this->assertInstanceOf(Transaction::class, $pt[0]);
+
+        $attributes = [
+            'id',
+            'timestamp',
+            'description',
+            'amount',
+            'currency',
+            'type',
+            'category',
+            'classification',
+            'merchant_name',
+            'meta',
+            'category',
+        ];
+
+        foreach ($attributes as $attribute) {
+            $this->assertObjectHasAttribute($attribute, $pt[0]);
+        }
     }
 }
