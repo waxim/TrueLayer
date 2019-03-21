@@ -31,8 +31,8 @@ class PendingTransactions extends Request
 
         $transactions = [];
 
-        foreach($data['results'] as $result) {
-            $transactions[] = (new Transaction($result));
+        foreach($data['results'] as $key => $result) {
+            $transactions[$key] = new Transaction($result);
         }
 
         return $transactions;
