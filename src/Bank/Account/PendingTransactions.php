@@ -13,7 +13,7 @@ class PendingTransactions extends Request
      * Get pending transactions
      *
      * @param string $account_id
-     * @return Transaction|array
+     * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws OauthTokenInvalid
      */
@@ -28,10 +28,13 @@ class PendingTransactions extends Request
         }
 
         $data = json_decode($result->getBody(), true);
-        $results = array_walk($data['results'], function ($value) {
-            return new Transaction($value);
-        });
 
-        return $results;
+        $transactions = [];
+
+        foreach($data['results'] as $result) {
+            $transactions[] = (new Transaction($result));
+        }
+
+        return $transactions;
     }
 }
