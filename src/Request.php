@@ -2,8 +2,11 @@
 
 namespace TrueLayer;
 
+use Psr\Http\Message\ResponseInterface;
+use Teapot\StatusCode\Http;
 use TrueLayer\Authorize\Token;
 use TrueLayer\Exceptions\InvalidCodeExchange;
+use TrueLayer\Exceptions\OauthTokenInvalid;
 use TrueLayer\Exceptions\TokenExpiredAndNotRefreshable;
 
 class Request
@@ -45,5 +48,16 @@ class Request
 
         $this->connection = $connection;
         $this->token = $token;
+    }
+
+    /**
+     * @param ResponseInterface $result
+     * @throws OauthTokenInvalid
+     */
+    public function OAuthCheck(ResponseInterface $result)
+    {
+        if ($result->getStatusCode() >= Http::BAD_REQUEST) {
+            throw new OauthTokenInvalid();
+        }
     }
 }
