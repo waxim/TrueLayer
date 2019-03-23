@@ -54,7 +54,7 @@ class Request
      * @param ResponseInterface $result
      * @throws OauthTokenInvalid
      */
-    public function OAuthCheck(ResponseInterface $result)
+    public function statusCheck(ResponseInterface $result)
     {
         if ($result->getStatusCode() >= Http::BAD_REQUEST) {
             throw new OauthTokenInvalid();
