@@ -1,0 +1,38 @@
+{
+  "results": [
+    {
+      "account_id": "f7b093437032c216d4350b7d442b9c5ccc0e9f19",
+      "card_network": "VISA",
+      "card_type": "CREDIT",
+      "currency": "GBP",
+      "display_name": "Club Credit Card",
+      "partial_card_number": "0044",
+      "name_on_card": "A. N. Other",
+      "valid_from": "2017-01",
+      "valid_to": "2018-01",
+      "update_timestamp": "2017-02-07T17:29:24.740802Z",
+      "provider": {
+        "display_name": "Lloyds Bank",
+        "logo_uri": "https://auth.truelayer.com/img/banks/banks-icons/lloyds-icon.svg",
+        "provider_id": "lloyds"
+      }
+    },
+    {
+      "account_id": "ad86fb1c213245b6b6594895068973efca5f9367",
+      "card_network": "MASTERCARD",
+      "card_type": "CHARGE",
+      "currency": "GBP",
+      "display_name": "Club Charge Card",
+      "partial_card_number": "0055",
+      "name_on_card": "A. N. Other",
+      "valid_from": "2017-01",
+      "valid_to": "2018-01",
+      "update_timestamp": "2017-02-07T17:29:24.740802Z",
+      "provider": {
+        "display_name": "Lloyds Bank",
+        "logo_uri": "https://auth.truelayer.com/img/banks/banks-icons/lloyds-icon.svg",
+        "provider_id": "lloyds"
+      }
+    }
+  ]
+}

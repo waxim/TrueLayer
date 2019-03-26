@@ -1,0 +1,6 @@
+{
+  "access_token": "JWT-ACCESS-TOKEN-HERE",
+  "expires_in": "JTW-EXPIRY-TIME",
+  "token_type": "Bearer",
+  "refresh_token": "REFRESH-TOKEN-HERE"
+}
