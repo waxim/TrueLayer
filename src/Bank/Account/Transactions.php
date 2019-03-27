@@ -37,10 +37,13 @@ class Transactions extends Request
         }
 
         $data = json_decode($result->getBody(), true);
-        $results = array_walk($data['results'], function ($value) {
-            return new Transaction($value);
-        });
 
-        return $results;
+        $transactions = [];
+
+        foreach($data['results'] as $key => $result) {
+            $transactions[] = new Transaction($result);
+        }
+
+        return $transactions;
     }
 }
