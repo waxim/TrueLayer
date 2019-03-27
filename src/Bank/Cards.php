@@ -27,10 +27,12 @@ class Cards extends Request
         }
 
         $accounts = json_decode($result->getBody(), true);
-        $results = array_walk($accounts['results'], function ($value) {
-            return new Card($value);
-        });
+        $cards = [];
 
-        return $results;
+        foreach ($accounts['results'] as $key => $result) {
+            $cards[$key] = new Card($result);
+        }
+
+        return $cards;
     }
 }
