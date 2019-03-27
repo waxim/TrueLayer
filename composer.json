@@ -5,7 +5,8 @@
   "require": {
     "guzzlehttp/guzzle": "^6.3",
     "ext-json": "*",
-    "teapot/status-code": "^1.1"
+    "teapot/status-code": "^1.1",
+    "guzzlehttp/streams": "^3.0"
   },
   "require-dev": {
     "filp/whoops": "^2.3",
