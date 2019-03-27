@@ -1,0 +1,23 @@
+{
+  "results": [
+    {
+      "addresses": [
+        {
+          "address": "1 Market Street",
+          "city": "San Francisco",
+          "country": "US",
+          "zip": "94103"
+        }
+      ],
+      "date_of_birth": "1984-07-03T00:00:00",
+      "emails": [
+        "john@doe.com"
+      ],
+      "full_name": "John Doe",
+      "phones": [
+        "+14151234567"
+      ],
+      "update_timestamp": "0001-01-01T00:00:00Z"
+    }
+  ]
+}
