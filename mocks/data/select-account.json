@@ -1,0 +1,22 @@
+{
+  "results": [
+    {
+      "simp_id": "44708581-1967-4120-8f6a-1e532f1bf52a",
+      "auth_uri": "https://pay-api.truelayer.com/?payment_id=44708581-1967-4120-8f6a-1e532f1bf52a",
+      "created_at": "2018-10-01T17:00:00.0000000+00:00",
+      "amount": 120000,
+      "currency": "GBP",
+      "remitter_provider_id": "ob-bank",
+      "remitter_name": "Mike Smith",
+      "remitter_sort_code": "987654",
+      "remitter_account_number": "98765432",
+      "remitter_reference": "FS-1000001",
+      "beneficiary_name": "Financial Services Ltd",
+      "beneficiary_sort_code": "234567",
+      "beneficiary_account_number": "23456789",
+      "beneficiary_reference": "FinServ-1a2b3c4d",
+      "redirect_uri": "https://client.app.com/payment_redirect",
+      "status": "new"
+    }
+  ]
+}

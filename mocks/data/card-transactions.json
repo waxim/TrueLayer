@@ -1,0 +1,31 @@
+{
+  "results": [
+    {
+      "transaction_id": "a15d8156569ba848d84c07c34d291bca",
+      "timestamp": "2018-01-16T00:00:00+00:00",
+      "amount": 24.25,
+      "currency": "GBP",
+      "description": "SAINSBURYS SMRKT STORE 128",
+      "transaction_type": "DEBIT",
+      "transaction_category": "PURCHASE",
+      "meta": {
+        "cardNumber": "1234********5678",
+        "location": "INTERNET"
+      }
+    },
+    {
+      "transaction_id": "af4d5470cc7ad6a83a02335ab8053481",
+      "timestamp": "2018-03-19T00:00:00",
+      "amount": 46.82,
+      "currency": "GBP",
+      "description": "TALKTALK TELECOM",
+      "transaction_type": "DEBIT",
+      "transaction_category": "PURCHASE",
+      "meta":{
+        "provider_transaction_category": "DEB",
+        "cardNumber": "1234********5678",
+        "location": "INTERNET"
+      }
+    }
+  ]
+}

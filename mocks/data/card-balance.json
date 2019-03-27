@@ -1,0 +1,15 @@
+{
+  "results": [
+    {
+      "available": 3279.0,
+      "currency": "GBP",
+      "current": 20.0,
+      "credit_limit": 3300,
+      "last_statement_balance": 420.0,
+      "last_statement_date": "2017-01-28",
+      "payment_due": 5.0,
+      "payment_due_date": "2017-02-24",
+      "update_timestamp": "2017-02-247T17:29:24.740802Z"
+    }
+  ]
+}

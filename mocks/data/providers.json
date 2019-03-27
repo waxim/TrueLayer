@@ -1,0 +1,13 @@
+{
+  "display_name": "RBS Scotland",
+  "logo_url": "https://auth.truelayer.com/img/banks/banks-icons/rbs-digital-icon.svg",
+  "provider_id": "rbs-digital",
+  "scopes": [
+    "info",
+    "accounts",
+    "transactions",
+    "balance",
+    "cards",
+    "offline_access"
+  ]
+}
