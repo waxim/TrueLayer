@@ -17,6 +17,6 @@ class RequestTest extends TestCase
             OauthTokenInvalid::class
         );
 
-        $request->OAuthCheck($response);
+        $request->statusCheck($response);
     }
 }

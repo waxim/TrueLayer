@@ -25,10 +25,12 @@ class PendingTransactions extends Request
         $this->statusCheck($result);
         $data = json_decode($result->getBody(), true);
 
-        array_walk($data['results'], function ($value) {
-            return new Transaction($value);
-        });
+        $transactions = [];
 
-        return $data['results'];
+        foreach($data['results'] as $result) {
+            $transactions[] = new Transaction($result);
+        }
+
+        return $transactions;
     }
 }
