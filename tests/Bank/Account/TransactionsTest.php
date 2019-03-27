@@ -42,7 +42,7 @@ class CardsTest extends TestCase
 
         $transactionsRequest = new Transactions($connection, $token);
 
-        $transactions    = $transactionsRequest->get(1);
+        $transactions = $transactionsRequest->get(1);
 
         $this->assertIsNotBool($transactions);
         $this->assertIsArray($transactions);
