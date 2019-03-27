@@ -11,7 +11,7 @@ use TrueLayer\Connection;
 use TrueLayer\Data\Card;
 use TrueLayer\Data\Transaction;
 
-class CardsTest extends TestCase
+class TransactionsTest extends TestCase
 {
     public function testGetReturnsAnArrayAndNotABoolean()
     {
