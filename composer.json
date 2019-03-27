@@ -22,5 +22,8 @@
       "name": "Alan Cole",
       "email": "alan@getchip.uk"
     }
-  ]
+  ],
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  }
 }
