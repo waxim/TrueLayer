@@ -11,7 +11,7 @@ class Cards extends Request
     /**
      * Get all accounts
      *
-     * @return Card|array
+     * @return Card[]
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws OauthTokenInvalid
      */
@@ -24,10 +24,12 @@ class Cards extends Request
         $this->statusCheck($result);
         $accounts = json_decode($result->getBody(), true);
 
-        array_walk($accounts['results'], function ($value) {
-            return new Card($value);
-        });
+        $cards = [];
 
-        return $accounts['results'];
+        foreach ($accounts['results'] as $key => $result) {
+            $cards[$key] = new Card($result);
+        }
+
+        return $cards;
     }
 }
