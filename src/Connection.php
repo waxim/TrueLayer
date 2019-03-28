@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use Teapot\StatusCode\Http;
 use TrueLayer\Authorize\Token;
 use TrueLayer\Exceptions\InvalidCodeExchange;
+use TrueLayer\Data\Status;
 
 class Connection
 {
@@ -17,6 +18,7 @@ class Connection
      */
     const AUTH_PATH = "https://auth.truelayer.com";
     const API_PATH = "https://api.truelayer.com";
+    const STATUS_URI = "https://status-api.truelayer.com/api/v1/data/status";
     const DATA_PATH = "data";
     const API_VERSION = "v1";
 
@@ -307,5 +309,70 @@ class Connection
         $this->access_token = $token;
 
         return $this;
+    }
+
+    /**
+     * A function to get our statuses for
+     * each bank for the last 24 hours
+     * 
+     * @param DateTime $from
+     * @param DateTime $to
+     * @param array $providers
+     * @return array|Status
+     */
+    public function getAvailability(
+        DateTime $from = null, 
+        DateTime $to = null,
+        array $providers = []
+    ) {
+        $from = $from ? $from : new DateTime("-24 hours");
+        $to  = $to ? $to : new DateTime();
+        $providers = $providers ? $providers : null;
+
+        $result = $this->connection->request(
+            'GET',
+            self::STATUS_URI,
+            [
+                'query' => array_filter([
+                    'from' => $from->format(DateTime::ISO8601),
+                    'to' => $to->format(DateTime::ISO8601),
+                    'providers' => $providers
+                ])
+            ]
+        );
+
+        if ((int) $result->getStatusCode() > Http::BAD_REQUEST) {
+            throw new InvalidCodeExchange;
+        }
+
+        $availability = [];
+        $results = json_decode($result->getBody(), true);
+ 
+        foreach($results['results'] as $result) {
+            foreach($result['providers'] as $name => $p){
+                $status = new Status();
+                $status->name = $p['provider_id'];
+                foreach($p['endpoints'] as $ep) {
+                    if($ep['endpoint'] === "accounts") {          
+                        $status->accounts = $ep['availability'];
+                    }
+
+                    if($ep['endpoint'] === "accounts/transactions") {
+                        $status->transactions = $ep['availability'];
+                    }
+
+                    if($ep['endpoint'] === "cards") {
+                        $status->cards = $ep['availability'];
+                    }
+
+                    if($ep['endpoint'] === "info") {
+                        $status->pii = $ep['availability'];
+                    }
+                }
+                $availability[$status->name] = $status;
+            }
+        }
+
+        return $availability;
     }
 }
