@@ -1,0 +1,76 @@
+{
+  "results": [
+    {
+      "timestamp": "2019-01-07 10:00:00.000",
+      "providers": [
+        {
+          "provider_id": "oauth-monzo",
+          "endpoints": [
+            {
+              "endpoint": "accounts",
+              "availability": 97.24,
+              "provider_error": 0,
+              "truelayer_error": 2.76
+            },
+            {
+              "endpoint": "accounts/balance",
+              "availability": 100,
+              "provider_error": 0,
+              "truelayer_error": 0
+            }
+          ]
+        },
+        {
+          "provider_id": "oauth-starling",
+          "endpoints": [
+            {
+              "endpoint": "accounts",
+              "availability": 100,
+              "provider_error": 0,
+              "truelayer_error": 0
+            },
+            {
+              "endpoint": "accounts/balance",
+              "availability": 100,
+              "provider_error": 0,
+              "truelayer_error": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "timestamp": "2019-01-07 11:00:00.000",
+      "providers": [
+        {
+          "provider_id": "oauth-monzo",
+          "endpoints": [
+            {
+              "endpoint": "accounts",
+              "availability": 100,
+              "provider_error": 0,
+              "truelayer_error": 0
+            },
+            {
+              "endpoint": "accounts/balance",
+              "availability": 92.86,
+              "provider_error": 7.14,
+              "truelayer_error": 0
+            }
+          ]
+        },
+        {
+          "provider_id": "oauth-starling",
+          "endpoints": [
+            {
+              "endpoint": "accounts",
+              "availability": 96.43,
+              "provider_error": 0,
+              "truelayer_error": 3.57
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 <?php
 
-namespace TrueLayer\Authorize;
+namespace TrueLayer\Tests;
 
 use PHPUnit\Framework\TestCase;
+use TrueLayer\Authorize\Token;
 
 class TokenTest extends TestCase
 {

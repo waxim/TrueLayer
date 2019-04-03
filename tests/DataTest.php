@@ -1,12 +1,14 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+namespace TrueLayer\Tests;
+
+use TrueLayer\Data;
 
 class DataTest extends TestCase
 {
     public function testWeCanDotAnArray()
     {
-        $data = new TrueLayer\Data;
+        $data = new Data();
         $array = [
             'testing' => 1,
             'test' => [

@@ -1,9 +1,10 @@
 <?php
 
+namespace TrueLayer\Tests;
+
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Teapot\StatusCode\Http;
-use TrueLayer\Authorize\TokenTest;
 use TrueLayer\Exceptions\OauthTokenInvalid;
 use TrueLayer\Request;
 

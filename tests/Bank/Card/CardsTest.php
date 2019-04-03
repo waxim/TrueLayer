@@ -1,13 +1,15 @@
 <?php
 
+namespace TrueLayer\Tests\Account;
+
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Stream\Stream;
-use PHPUnit\Framework\TestCase;
 use Teapot\StatusCode\Http;
 use TrueLayer\Authorize\Token;
 use TrueLayer\Bank\Cards;
 use TrueLayer\Connection;
 use TrueLayer\Data\Card;
+use TrueLayer\Tests\TestCase;
 
 class CardsTest extends TestCase
 {

@@ -1,8 +1,10 @@
 <?php
 
+namespace TrueLayer\Tests\Account;
+
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Stream\Stream;
-use PHPUnit\Framework\TestCase;
+use TrueLayer\Tests\TestCase;
 use Teapot\StatusCode\Http;
 use TrueLayer\Authorize\Token;
 use TrueLayer\Bank\Account\Information;
