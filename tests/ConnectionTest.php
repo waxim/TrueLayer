@@ -1,10 +1,16 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+namespace TrueLayer\Tests;
+
+use TrueLayer\Banking\DataResolver;
 use TrueLayer\Connection;
+use TrueLayer\Exceptions\UnresolvableResult;
 
 class ConnectionTest extends TestCase
 {
+    /**
+     * @var Connection
+     */
     private $connection;
 
     public function setUp(): void
@@ -21,7 +27,6 @@ class ConnectionTest extends TestCase
 
     public function testWeGetAnAuthorizationLink()
     {
-
         $url = filter_var($this->connection->getAuthorizationLink(), FILTER_VALIDATE_URL);
         $this->assertTrue((bool) $url);
         $this->assertStringContainsString('response_type', $url);
@@ -37,7 +42,24 @@ class ConnectionTest extends TestCase
         $this->assertStringContainsString('response_mode', $url);
     }
 
-    public static function createTestConnection(): Connection
+    public function testWhenResolverFunctionDoesntExist()
+    {
+        $this->expectException(UnresolvableResult::class);
+        $this->connection->resolver(['results' => []], 'aFunctionWhichDoesNotExist');
+    }
+
+    public function testBankingResolver()
+    {
+        $resolver = new DataResolver();
+
+        $mockData = json_decode($this->getMockResponse('status/availability.json'), true);
+        $this->connection->setDataResolver($resolver);
+        $resolver = $this->connection->resolver($mockData, 'getAvailability');
+
+        $this->assertIsArray($resolver);
+    }
+
+    public static function createTestConnection()
     {
         return new Connection(
             "test_id",
