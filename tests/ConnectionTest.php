@@ -42,23 +42,6 @@ class ConnectionTest extends TestCase
         $this->assertStringContainsString('response_mode', $url);
     }
 
-    public function testWhenResolverFunctionDoesntExist()
-    {
-        $this->expectException(UnresolvableResult::class);
-        $this->connection->resolver(['results' => []], 'aFunctionWhichDoesNotExist');
-    }
-
-    public function testBankingResolver()
-    {
-        $resolver = new DataResolver();
-
-        $mockData = json_decode($this->getMockResponse('status/availability.json'), true);
-        $this->connection->setDataResolver($resolver);
-        $resolver = $this->connection->resolver($mockData, 'getAvailability');
-
-        $this->assertIsArray($resolver);
-    }
-
     public static function createTestConnection()
     {
         return new Connection(
