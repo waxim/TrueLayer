@@ -2,21 +2,12 @@
 
 namespace TrueLayer\Tests;
 
-use TrueLayer\Banking\DataResolver;
 use TrueLayer\Connection;
-use TrueLayer\Exceptions\UnresolvableResult;
+use TrueLayer\Tests\Traits\HasConnectionTrait;
 
 class ConnectionTest extends TestCase
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    public function setUp(): void
-    {
-        $this->connection = $this->createTestConnection();
-    }
+    use HasConnectionTrait;
 
     public function testWeCanSetClientIdAndSecret()
     {
@@ -40,14 +31,5 @@ class ConnectionTest extends TestCase
         $this->assertStringContainsString('enable_open_banking_providers', $url);
         $this->assertStringContainsString('enable_credentials_sharing_providers', $url);
         $this->assertStringContainsString('response_mode', $url);
-    }
-
-    public static function createTestConnection()
-    {
-        return new Connection(
-            "test_id",
-            "test_secret",
-            "https://localhost.test"
-        );
     }
 }
