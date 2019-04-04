@@ -2,6 +2,7 @@
 
 namespace TrueLayer\Tests\Banking;
 
+use TrueLayer\Banking\AbstractResolver;
 use TrueLayer\Banking\DataResolver;
 use TrueLayer\Data\Status;
 use TrueLayer\Exceptions\UnresolvableResult;
@@ -12,10 +13,22 @@ class DataResolverTest extends TestCase
 {
     use HasConnectionTrait;
 
+    public function testAnInstanceOfAbstractResolverIsReturnedByConnection()
+    {
+        $this->assertInstanceOf(AbstractResolver::class, $this->connection->getDataResolver());
+    }
+
+    public function testAnInstanceOfAbstractResolverIsReturnedByConnectionOnceSet()
+    {
+        $this->connection->setDataResolver(new DataResolver());
+        $this->assertInstanceOf(AbstractResolver::class, $this->connection->getDataResolver());
+        $this->assertInstanceOf(DataResolver::class, $this->connection->getDataResolver());
+    }
+
     public function testWhenResolverFunctionDoesntExist()
     {
         $this->expectException(UnresolvableResult::class);
-        $this->connection->resolver(['results' => []], 'aFunctionWhichDoesNotExist');
+        $this->connection->resolve(['results' => []], 'aFunctionWhichDoesNotExist');
     }
 
     public function testBankingResolver()
@@ -31,7 +44,7 @@ class DataResolverTest extends TestCase
         $this->assertEquals('oauth-starling', $starlingMockData['provider_id']);
 
         $this->connection->setDataResolver($resolver);
-        $resolver = $this->connection->resolver($mockData, 'getAvailability');
+        $resolver = $this->connection->resolve($mockData, 'getAvailability');
 
         /** @var Status $monzoStatus */
         $monzoStatus = $resolver[$monzoMockData['provider_id']];

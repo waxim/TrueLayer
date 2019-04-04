@@ -4,7 +4,7 @@ namespace TrueLayer\Banking;
 
 use TrueLayer\Data\Status;
 
-class DataResolver
+class DataResolver extends AbstractResolver
 {
     /**
      * @param array $results

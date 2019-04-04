@@ -6,6 +6,8 @@ use DateTime;
 use GuzzleHttp\Client;
 use Teapot\StatusCode\Http;
 use TrueLayer\Authorize\Token;
+use TrueLayer\Banking\AbstractResolver;
+use TrueLayer\Banking\DataResolver;
 use TrueLayer\Exceptions\InvalidCodeExchange;
 use TrueLayer\Data\Status;
 use TrueLayer\Exceptions\UnresolvableResult;
@@ -42,7 +44,7 @@ class Connection
     protected $access_token;
     protected $scope;
     protected $state;
-    protected $data_resolver = Banking\DataResolver::class;
+    protected $data_resolver;
 
     /**
      * Set values and start a guzzle
@@ -66,6 +68,7 @@ class Connection
         $this->request_uri = $request_uri;
         $this->scope = $scope;
         $this->state = $state;
+        $this->data_resolver = new DataResolver();
     }
 
     /**
@@ -240,6 +243,24 @@ class Connection
 
         return new Token($token);
     }
+    /**
+     * @return string
+     */
+    public function getDataResolver()
+    {
+        return $this->data_resolver;
+    }
+
+    /**
+     * @param AbstractResolver $resolver
+     * @return Connection
+     */
+    public function setDataResolver(AbstractResolver $resolver)
+    {
+        $this->data_resolver = $resolver;
+
+        return $this;
+    }
 
     /**
      * Refresh an auth token
@@ -321,6 +342,9 @@ class Connection
      * @param DateTime $to
      * @param array $providers
      * @return array|Status
+     * @throws InvalidCodeExchange
+     * @throws UnresolvableResult
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getAvailability(
         DateTime $from = null, 
@@ -347,26 +371,21 @@ class Connection
             throw new InvalidCodeExchange;
         }
 
-        return $this->resolver(json_decode($result->getBody(), true), __FUNCTION__);
+        return $this->resolve(json_decode($result->getBody(), true), __FUNCTION__);
     }
 
     /**
-     * @param $results
-     * @param $function
+     * @param array $results
+     * @param string $function
      * @return mixed
      * @throws UnresolvableResult
      */
-    public function resolver($results, $function)
+    public function resolve(array $results, $function)
     {
         if (false === method_exists($this->data_resolver, $function)) {
             throw new UnresolvableResult($function);
         }
 
         return $this->data_resolver->{$function}($results);
-    }
-
-    public function setDataResolver($resolver)
-    {
-        $this->data_resolver = $resolver;
     }
 }
