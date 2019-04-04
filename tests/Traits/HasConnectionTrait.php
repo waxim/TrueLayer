@@ -11,12 +11,12 @@ trait HasConnectionTrait
      */
     protected $connection;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->connection = $this->createTestConnection();
     }
 
-    public static function createTestConnection()
+    protected function createTestConnection()
     {
         return new Connection(
             "test_id",
