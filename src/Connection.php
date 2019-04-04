@@ -54,13 +54,15 @@ class Connection
      * @param $request_uri
      * @param array $scope
      * @param null $state
+     * @param string $data_resolver
      */
     public function __construct(
         $client_id,
         $client_secret,
         $request_uri,
         $scope = [],
-        $state = null
+        $state = null,
+        $data_resolver = DataResolver::class
     ) {
         $this->connection = new Client;
         $this->client_id = $client_id;
@@ -68,7 +70,7 @@ class Connection
         $this->request_uri = $request_uri;
         $this->scope = $scope;
         $this->state = $state;
-        $this->data_resolver = new DataResolver();
+        $this->data_resolver = new $data_resolver();
     }
 
     /**
