@@ -2,12 +2,25 @@
 
 namespace TrueLayer\Tests;
 
+use TrueLayer\Banking\DataResolver;
 use TrueLayer\Connection;
 use TrueLayer\Tests\Traits\HasConnectionTrait;
 
 class ConnectionTest extends TestCase
 {
     use HasConnectionTrait;
+
+    public function testDataResolverCanBeSetFromConstructor()
+    {
+        $connection = new Connection(1,2,'http://hello.com', [],null, DataResolver::class);
+        $this->assertInstanceOf(DataResolver::class, $connection->getDataResolver());
+    }
+
+    public function testDataResolverDefaultClass()
+    {
+        $connection = new Connection(1,2,'http://hello.com', [],null);
+        $this->assertInstanceOf(DataResolver::class, $connection->getDataResolver());
+    }
 
     public function testWeCanSetClientIdAndSecret()
     {
