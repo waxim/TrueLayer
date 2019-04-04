@@ -12,13 +12,13 @@ class ConnectionTest extends TestCase
 
     public function testDataResolverCanBeSetFromConstructor()
     {
-        $connection = new Connection(1,2,'http://hello.com', [],null, DataResolver::class);
+        $connection = new Connection(1, 2, 'http://hello.com', [], null, DataResolver::class);
         $this->assertInstanceOf(DataResolver::class, $connection->getDataResolver());
     }
 
     public function testDataResolverDefaultClass()
     {
-        $connection = new Connection(1,2,'http://hello.com', [],null);
+        $connection = new Connection(1, 2, 'http://hello.com', [], null);
         $this->assertInstanceOf(DataResolver::class, $connection->getDataResolver());
     }
 
