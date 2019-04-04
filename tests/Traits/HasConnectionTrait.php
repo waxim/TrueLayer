@@ -13,12 +13,7 @@ trait HasConnectionTrait
 
     protected function setUp(): void
     {
-        $this->connection = $this->createTestConnection();
-    }
-
-    protected function createTestConnection()
-    {
-        return new Connection(
+        $this->connection = new Connection(
             "test_id",
             "test_secret",
             "https://localhost.test"
