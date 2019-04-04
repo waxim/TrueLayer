@@ -6,8 +6,11 @@ use DateTime;
 use GuzzleHttp\Client;
 use Teapot\StatusCode\Http;
 use TrueLayer\Authorize\Token;
+use TrueLayer\Banking\AbstractResolver;
+use TrueLayer\Banking\DataResolver;
 use TrueLayer\Exceptions\InvalidCodeExchange;
 use TrueLayer\Data\Status;
+use TrueLayer\Exceptions\UnresolvableResult;
 
 class Connection
 {
@@ -41,6 +44,7 @@ class Connection
     protected $access_token;
     protected $scope;
     protected $state;
+    protected $data_resolver;
 
     /**
      * Set values and start a guzzle
@@ -64,6 +68,7 @@ class Connection
         $this->request_uri = $request_uri;
         $this->scope = $scope;
         $this->state = $state;
+        $this->data_resolver = new DataResolver();
     }
 
     /**
@@ -238,6 +243,24 @@ class Connection
 
         return new Token($token);
     }
+    /**
+     * @return string
+     */
+    public function getDataResolver()
+    {
+        return $this->data_resolver;
+    }
+
+    /**
+     * @param AbstractResolver $resolver
+     * @return Connection
+     */
+    public function setDataResolver(AbstractResolver $resolver)
+    {
+        $this->data_resolver = $resolver;
+
+        return $this;
+    }
 
     /**
      * Refresh an auth token
@@ -314,11 +337,14 @@ class Connection
     /**
      * A function to get our statuses for
      * each bank for the last 24 hours
-     * 
+     *
      * @param DateTime $from
      * @param DateTime $to
      * @param array $providers
      * @return array|Status
+     * @throws InvalidCodeExchange
+     * @throws UnresolvableResult
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getAvailability(
         DateTime $from = null, 
@@ -345,34 +371,21 @@ class Connection
             throw new InvalidCodeExchange;
         }
 
-        $availability = [];
-        $results = json_decode($result->getBody(), true);
- 
-        foreach($results['results'] as $result) {
-            foreach($result['providers'] as $name => $p){
-                $status = new Status();
-                $status->name = $p['provider_id'];
-                foreach($p['endpoints'] as $ep) {
-                    if($ep['endpoint'] === "accounts") {          
-                        $status->accounts = $ep['availability'];
-                    }
+        return $this->resolve(json_decode($result->getBody(), true), __FUNCTION__);
+    }
 
-                    if($ep['endpoint'] === "accounts/transactions") {
-                        $status->transactions = $ep['availability'];
-                    }
-
-                    if($ep['endpoint'] === "cards") {
-                        $status->cards = $ep['availability'];
-                    }
-
-                    if($ep['endpoint'] === "info") {
-                        $status->pii = $ep['availability'];
-                    }
-                }
-                $availability[$status->name] = $status;
-            }
+    /**
+     * @param array $results
+     * @param string $function
+     * @return mixed
+     * @throws UnresolvableResult
+     */
+    public function resolve(array $results, $function)
+    {
+        if (false === method_exists($this->data_resolver, $function)) {
+            throw new UnresolvableResult($function);
         }
 
-        return $availability;
+        return $this->data_resolver->{$function}($results);
     }
 }
