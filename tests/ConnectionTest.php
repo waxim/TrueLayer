@@ -1,15 +1,25 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+namespace TrueLayer\Tests;
+
+use TrueLayer\Banking\DataResolver;
 use TrueLayer\Connection;
+use TrueLayer\Tests\Traits\HasConnectionTrait;
 
 class ConnectionTest extends TestCase
 {
-    private $connection;
+    use HasConnectionTrait;
 
-    public function setUp(): void
+    public function testDataResolverCanBeSetFromConstructor()
     {
-        $this->connection = $this->createTestConnection();
+        $connection = new Connection(1, 2, 'http://hello.com', [], null, DataResolver::class);
+        $this->assertInstanceOf(DataResolver::class, $connection->getDataResolver());
+    }
+
+    public function testDataResolverDefaultClass()
+    {
+        $connection = new Connection(1, 2, 'http://hello.com', [], null);
+        $this->assertInstanceOf(DataResolver::class, $connection->getDataResolver());
     }
 
     public function testWeCanSetClientIdAndSecret()
@@ -21,7 +31,6 @@ class ConnectionTest extends TestCase
 
     public function testWeGetAnAuthorizationLink()
     {
-
         $url = filter_var($this->connection->getAuthorizationLink(), FILTER_VALIDATE_URL);
         $this->assertTrue((bool) $url);
         $this->assertStringContainsString('response_type', $url);
@@ -35,14 +44,5 @@ class ConnectionTest extends TestCase
         $this->assertStringContainsString('enable_open_banking_providers', $url);
         $this->assertStringContainsString('enable_credentials_sharing_providers', $url);
         $this->assertStringContainsString('response_mode', $url);
-    }
-
-    public static function createTestConnection(): Connection
-    {
-        return new Connection(
-            "test_id",
-            "test_secret",
-            "https://localhost.test"
-        );
     }
 }

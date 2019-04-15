@@ -35,7 +35,7 @@ class Status
     /**
      * accounts
      *
-     * @var double
+     * @var int|double
      */
     public $accounts;
 }
