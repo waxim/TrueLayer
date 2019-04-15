@@ -6,8 +6,11 @@ use DateTime;
 use GuzzleHttp\Client;
 use Teapot\StatusCode\Http;
 use TrueLayer\Authorize\Token;
+use TrueLayer\Banking\AbstractResolver;
+use TrueLayer\Banking\DataResolver;
 use TrueLayer\Exceptions\InvalidCodeExchange;
 use TrueLayer\Data\Status;
+use TrueLayer\Exceptions\UnresolvableResult;
 
 class Connection
 {
@@ -41,6 +44,9 @@ class Connection
     protected $access_token;
     protected $scope;
     protected $state;
+    protected $data_resolver;
+    protected $sandbox = false;
+    protected $provider;
 
     /**
      * Set values and start a guzzle
@@ -50,13 +56,16 @@ class Connection
      * @param $request_uri
      * @param array $scope
      * @param null $state
+     * @param string $data_resolver
      */
     public function __construct(
         $client_id,
         $client_secret,
         $request_uri,
         $scope = [],
-        $state = null
+        $state = null,
+        $data_resolver = DataResolver::class,
+        $provider = null
     ) {
         $this->connection = new Client;
         $this->client_id = $client_id;
@@ -64,6 +73,8 @@ class Connection
         $this->request_uri = $request_uri;
         $this->scope = $scope;
         $this->state = $state;
+        $this->data_resolver = new $data_resolver();
+        $this->provider = $provider;
     }
 
     /**
@@ -190,8 +201,7 @@ class Connection
      */
     public function getAuthorizationLink()
     {
-
-        return self::AUTH_PATH . "/" .
+        $url = self::AUTH_PATH . "/" .
             "?response_type=code" .
             "&client_id=" . $this->getClientId() .
             "&nonce=" . $this->getNonce() .
@@ -203,6 +213,12 @@ class Connection
             "&enable_open_banking_providers=false" .
             "&enable_credentials_sharing_providers=true" .
             "&response_mode=form_post";
+
+        if ($this->provider) {
+            $url .= "&provider_id=" . $this->provider;
+        }
+
+        return $url;
     }
 
     /**
@@ -237,6 +253,24 @@ class Connection
         $token = json_decode($result->getBody(), true);
 
         return new Token($token);
+    }
+    /**
+     * @return string
+     */
+    public function getDataResolver()
+    {
+        return $this->data_resolver;
+    }
+
+    /**
+     * @param AbstractResolver $resolver
+     * @return Connection
+     */
+    public function setDataResolver(AbstractResolver $resolver)
+    {
+        $this->data_resolver = $resolver;
+
+        return $this;
     }
 
     /**
@@ -312,13 +346,28 @@ class Connection
     }
 
     /**
+     * Set our provider if known
+     *
+     * @param $provider
+     * @return Connection
+     */
+    public function setProvider($provider)
+    {
+        $this->provider = $provider;
+        return $this;
+    }
+
+    /**
      * A function to get our statuses for
      * each bank for the last 24 hours
-     * 
+     *
      * @param DateTime $from
      * @param DateTime $to
      * @param array $providers
      * @return array|Status
+     * @throws InvalidCodeExchange
+     * @throws UnresolvableResult
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getAvailability(
         DateTime $from = null, 
@@ -345,34 +394,21 @@ class Connection
             throw new InvalidCodeExchange;
         }
 
-        $availability = [];
-        $results = json_decode($result->getBody(), true);
- 
-        foreach($results['results'] as $result) {
-            foreach($result['providers'] as $name => $p){
-                $status = new Status();
-                $status->name = $p['provider_id'];
-                foreach($p['endpoints'] as $ep) {
-                    if($ep['endpoint'] === "accounts") {          
-                        $status->accounts = $ep['availability'];
-                    }
+        return $this->resolve(json_decode($result->getBody(), true), __FUNCTION__);
+    }
 
-                    if($ep['endpoint'] === "accounts/transactions") {
-                        $status->transactions = $ep['availability'];
-                    }
-
-                    if($ep['endpoint'] === "cards") {
-                        $status->cards = $ep['availability'];
-                    }
-
-                    if($ep['endpoint'] === "info") {
-                        $status->pii = $ep['availability'];
-                    }
-                }
-                $availability[$status->name] = $status;
-            }
+    /**
+     * @param array $results
+     * @param string $function
+     * @return mixed
+     * @throws UnresolvableResult
+     */
+    public function resolve(array $results, $function)
+    {
+        if (false === method_exists($this->data_resolver, $function)) {
+            throw new UnresolvableResult($function);
         }
 
-        return $availability;
+        return $this->data_resolver->{$function}($results);
     }
 }
