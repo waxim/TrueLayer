@@ -45,11 +45,8 @@ class Connection
     protected $scope;
     protected $state;
     protected $data_resolver;
-<<<<<<< HEAD
     protected $sandbox = false;
     protected $provider;
-=======
->>>>>>> 18ed9cb8d73fea973e73d1dcda75143fcd327736
 
     /**
      * Set values and start a guzzle
@@ -60,6 +57,7 @@ class Connection
      * @param array $scope
      * @param null $state
      * @param string $data_resolver
+     * @param string $provider
      */
     public function __construct(
         $client_id,
@@ -67,12 +65,8 @@ class Connection
         $request_uri,
         $scope = [],
         $state = null,
-<<<<<<< HEAD
         $data_resolver = DataResolver::class,
         $provider = null
-=======
-        $data_resolver = DataResolver::class
->>>>>>> 18ed9cb8d73fea973e73d1dcda75143fcd327736
     ) {
         $this->connection = new Client;
         $this->client_id = $client_id;
@@ -81,10 +75,7 @@ class Connection
         $this->scope = $scope;
         $this->state = $state;
         $this->data_resolver = new $data_resolver();
-<<<<<<< HEAD
         $this->provider = $provider;
-=======
->>>>>>> 18ed9cb8d73fea973e73d1dcda75143fcd327736
     }
 
     /**
