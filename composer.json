@@ -14,7 +14,8 @@
   },
   "autoload": {
     "psr-4": {
-      "TrueLayer\\": "src"
+      "TrueLayer\\": "src",
+      "TrueLayer\\Tests\\": "tests"
     }
   },
   "license": "MIT",
