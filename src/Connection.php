@@ -22,6 +22,9 @@ class Connection
     const AUTH_PATH = "https://auth.truelayer.com";
     const API_PATH = "https://api.truelayer.com";
     const STATUS_URI = "https://status-api.truelayer.com/api/v1/data/status";
+    const SANDBOX_AUTH_PATH = "https://auth.truelayer-sandbox.com";
+    const SANDBOX_API_PATH = "https://api.truelayer-sandbox.com";
+    const SANDBOX_STATUS_URI = "https://status-api.truelayer-sandbox.com/api/v1/data/status";
     const DATA_PATH = "data";
     const API_VERSION = "v1";
 
@@ -45,7 +48,7 @@ class Connection
     protected $scope;
     protected $state;
     protected $data_resolver;
-    protected $sandbox = false;
+    protected $sandbox;
     protected $provider;
 
     /**
@@ -66,7 +69,8 @@ class Connection
         $scope = [],
         $state = null,
         $data_resolver = DataResolver::class,
-        $provider = null
+        $provider = null,
+        $sandbox = false
     ) {
         $this->connection = new Client;
         $this->client_id = $client_id;
@@ -76,6 +80,7 @@ class Connection
         $this->state = $state;
         $this->data_resolver = new $data_resolver();
         $this->provider = $provider;
+        $this->sandbox = $sandbox;
     }
 
     /**
@@ -115,7 +120,8 @@ class Connection
      */
     public function getTokenUrl()
     {
-        return self::AUTH_PATH . "/connect/token";
+        $auth_path = ($this->sandbox) ? self::SANDBOX_AUTH_PATH : self::AUTH_PATH;
+        return $auth_path . "/connect/token";
     }
 
     /**
@@ -136,7 +142,8 @@ class Connection
      */
     public function getUrl($path = "/")
     {
-        return self::API_PATH . $path;
+        $api_path = ($this->sandbox) ? self::SANDBOX_API_PATH : self::API_PATH;
+        return $api_path . $path;
     }
 
     /**
@@ -202,7 +209,8 @@ class Connection
      */
     public function getAuthorizationLink()
     {
-        $url = self::AUTH_PATH . "/" .
+        $auth_path = ($this->sandbox) ? self::SANDBOX_AUTH_PATH : self::AUTH_PATH;
+        $url = $auth_path . "/" .
             "?response_type=code" .
             "&client_id=" . $this->getClientId() .
             "&nonce=" . $this->getNonce() .
